@@ -1,5 +1,9 @@
 # Tarea-1.1.2  
 
+Francisco Javier Díaz Garrón  
+18/10/2026  
+ASIR 2º  
+
 ## Parte A. Investiga antes de modificar el entorno  
 
 ### 1. Vagrant y el Vagrantfile. Explica brevemente qué problema resuelve Vagrant y distingue el anfitrión, el proveedor de virtualización, la box y la máquina virtual. Averigua en qué lenguaje está escrito el `Vagrantfile`. Analiza el archivo inicial y, al terminar la práctica, comenta cada línea activa del archivo final: qué configura, por qué la añadiste y cómo compruebas que ha surtido efecto.  
@@ -9,6 +13,44 @@ El problema que soluciona vagrant, es que al automatizar todo el proceso de crea
 El anfitrión es el propio ordenador que utilizas y donde tienes todo, el proveedor de virtualización va a ser el encargado de realizar toda la creación y configuración de la máquina, ya que no lo hace vagrant en si si no que manda a otra aplicación a hacerlo, en mi caso virtualBox, la box es la imagen base del sistema operativo que tendrá la máquina virtual, es decir, como la plantilla del sistema operativo de la que se parte, y la máquina virtual es el resultado final, es decir, es lo que crea vagrant, una máquina con la que puedes trabajar sin que afecte a tu sistema principal.  
 
 El lenguaje de programación que utiliza vagrantfile es Ruby.  
+
+Archivo final de vagrantfile  
+
+`Vagrant.configure("2") do |config|`  
+Sirve para abrir el bloque principal de configuración de vagrant, lo añadi porque es obligatorio añadirlo en el lenguaje Ruby, sino no funciona absolutamente nada, y se comprueba con vagrant validate en la terminal, aparte viendo que existe la máquina virtual.  
+
+`config.vm.box = "debian/bookworm64"`  
+Sirve para decirle a vagrant que box/plantilla va a descargar para montar el entorno, lo he añadido para indicar a vagrant que la máquina virtual va a ser un sistema Debian 12, se comprueba cuando entramos a la máquina virtual y ejecutamos cat /etc/os-release, y aqui veremos el box que esta descargado.  
+
+`config.vm.hostname = "javiervagrant"`  
+Sirve para asignarle el nombre que tendra la máquina internamente, el nombre del host, lo añadi porque en un apartado de la tarea me pide que le ponga un hostname, se comprueba al hacer vagrant ssh, y si aparece despues del @ el mismo nombre que pusimos funciona.  
+
+`config.vm.network "private_network", ip: "192.168.56.10"`  
+Sirve para añadir una segunda tarjeta de red a la máquina y configurarla como una red privada a la máquina virtual con una IP explicita la cual en este caso es la 192.168.56.10, la he añadido porque me lo indica un apartado de la tarea que le añada una red interna, se comprueba al estar dentro de la máquina virtual y hacer ip a, si aparece una tarjeta de red con esa IP entonces si funciono.  
+
+`config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"`  
+Sirve para redireccionar el trafico de mi puerto 8080 al puerto 80 de la máquina virtual, indicando también que IP tiene, lo he añadido porque me lo indica un apartado de la tarea y para poder hacer pruebas sin tener que exponer la IP de la máquina con el exterior, se comprueba si ponemos la IP que se indica la 127.0.0.1 en el comando en el navegador de nuestro ordenador y viendo la página web que creamos.  
+
+`config.vm.provision "shell", path: "temporal.sh"`  
+Sirve para enlazar el aprovisionamiento que creamos para descargar y configurar apache en otro archivo, lo he añadido porque sino la máquina virtual se creara sin apache2 y entonces la práctica estara mal ya que pide enlazarlo por lo que se añade para que descargue y configure apache2 sino no lo hace y ignora el archivo, se comprueba con un simple sudo systemctl status apache2, si te muestra que el servicio esta activo y sin problemas funciono el enlace, si te dice que no existe apache2 esque no se enlazo bien.  
+
+`config.vm.provider "virtualbox" do |vb|`  
+Sirve para abrir las opciones avanzadas del proveedor que realizara la instalación, VirtualBox, para añadir configuración adicional a la máquina, la he añadido para modificar alguna configuración que le configura vagrant por defecto a la máquina, se puede comprobar viendo luego las especificaciones de la máquina y si estan todas entonces funciono.  
+
+`vb.memory = "4096"`  
+Sirve para indicar que la máquina virtual tendra una memoria RAM de 4GB, la he añadido ya que vagrant por defecto pone 512 MB de memoria principal y para apache2 y Dbian 12 eso es imposible que funcione, se comprueba viendo las especificaciones de la máquina una vez creada si tiene 4GB de RAM funciona si no no funciono.  
+
+`vb.cpus = 2`  
+Sirve para indicar que la máquina virtual tendra 2 cpus, la he añadido ya que para no tener la configuración por defecto de vagrant y que no de problemas Debian ni apache, se comprueba viendo las especificaciones de la máquina virtual y viendo si tiene 2 cpus.  
+
+`vb.name = "Máquina-vagrant-Javier"`  
+Sirve para indicar que la máquina virtual tendrá el nombre que se indica entre comillas dobles, lo he añadido para diferenciarla de otras máquinas virtuales, se comprueba al entrar a virtualbox y viendo la máquina virtual, si hay una con ese nombre funciono.  
+
+`end`  
+Sirve para indicar que se acabo el bloque de configuración avanzada del proveedor, la he añadido ya que es obligatoria si no dara error el archivo, se comprueba que a funcionado si no a dado error el archivo.  
+
+`end`  
+Sirve para indicar que se acabo el bloque de configuración de vagrant, la he añadido ya que es obligatoria si no dará error el archivo, se comprueba que a funcionado si no a dado error el archivo.  
 
 ### 2. Aprovisionamiento. Investiga qué es un provisioner, dónde se ejecuta el script, cuándo lo lanza Vagrant y qué diferencia hay entre `inline:` y `path:`. Explica qué ocurre si modificas el script después del primer `vagrant up` y cómo lo ejecutarías de nuevo.  
 
@@ -23,6 +65,32 @@ Si modificas el archivo de descarga de apache2, no pasara absolutamente nada en 
 ### 3. Interfaces y redes Investiga qué conexión de red configura Vagrant por defecto y para qué la utiliza. Averigua cómo se añade en el Vagrantfile una segunda interfaz con dirección IP fija. Compara NAT, red interna, red privada host-only y red pública: explica con quién puede comunicarse la máquina en cada caso y qué función cumple el reenvío de puertos.  
 ### Presta especial atención a la diferencia entre la red interna de VirtualBox y la red privada host-only de VMware. Investiga cómo se configura la segunda interfaz en el proveedor que utilices. ¿Añadirla elimina la NAT predeterminada? ¿El reenvío de puertos crea una interfaz nueva?  
 ### En la parte C configurarás una máquina con dos interfaces: NAT y red de laboratorio. Examina después sus direcciones y rutas de red, relaciona lo observado con el Vagrantfile e incluye un esquema de la arquitectura en tu README.md. Como solo hay una máquina, no se pide demostrar comunicación con otra VM.  
+
+La conexión de red que pone vagrant por defecto es NAT, lo hace para que el anfitrión pueda conectarse por SSH a la máquina sin problemas, y para que las máquinas virtuales tengan acceso a internet.  
+
+Para añadir una interfaz de red en modo red privada hay que añadir config.vm.network "private_network", ip: "dirección IP" en el bloque de configuración de vagrantfile.  
+
+Con NAT, la máquina se puede comunicar con internet para instalar software, o otras cosas, pero no puede comunicarse con ningun ordenador de fuera ni con el propio anfitrión.  
+
+Con red interna, la máquina virtual puede comunicarse con otras máquinas virtuales que estén en la misma red interna, pero con nadie más, ni con el anfitrión ni con internet.  
+
+Con red privada host-only, puedes comunicar tu máquina virtual con el anfitrión, es decir tu ordenador, pero con nada más.  
+
+Con red pública, la máquina se comunica al conmutador virtual, haciendo que el router le de una IP propia de la misma red que otros dispositivos, lo que permite que se pueda comunicar con el anfitrión, con otros equipos de la red y con internet.  
+
+El reenvio de puertos cumple una función muy importante, y es que la función que cumple es la de actuar como un puente de comunicación, ya que al estar aislada la máquina de la red al reenviar el trafico con los puertos del 8080 de nuestro ordenador al 80 de la máquina, permite que nuestro ordenador pueda comunicarse con la máquina por eso si en el navegador ponemos la IP de la máquina nos sale la página web que creamos para apache2.  
+
+Una red host-only, se configura añadiendo esta linea config.vm.network "private_network", ip: "dirección IP", ya que aunque pone red interna Ruby pone por defecto host-only  
+
+¿Añadirla elimina la NAT predeterminada?  
+No, añadir una nueva interfaz no afecta en absolutamente en nada a la NAT, por lo que la configuración de la NAT será la misma y no se eliminara.  
+
+¿El reenvío de puertos crea una interfaz nueva?  
+No, no añade ninguna interfaz nueva, es solamente una regla que se añade pero no añade ninguna interfaz.  
+
+Esquema de la arquitectura:  
+
+![Esquema arquitectura](imagenes/Captura9.png)  
 
 ### 4. Órdenes y carpeta compartida. En una tabla breve, indica cuándo usarías `up`, `status`, `ssh`, `reload`, `provision`, `halt` y `destroy`; marca cuáles llegaste a ejecutar. Averigua qué es `/vagrant` y comprueba qué archivos aparecen allí.  
 
@@ -99,12 +167,16 @@ servidor continúa funcionando.
 [Archivo para descargar apache2](archivos/temporal.sh)  
 
 Con esta captura se puede observar que con un status, se nos muestra que el estado del servicio apache esta bien funcionando y sin problemas y encendido.  
-![Rutas de red](imagenes/Captura4.png)  
+![Estado del servicio apache2](imagenes/Captura4.png)  
 
 Y con esta captura podemos ver que si en el buscador ponemos la dirección IP de la máquina virtual, la de la red privada, nos aparecera la página que hemos creado en el archivo de provisioner que vinculamos en el vagrantfile.  
-![Rutas de red](imagenes/Captura5.png)  
+![Página web creada para apache](imagenes/Captura5.png)  
 
 Si hemos modificado el archivo y queremos volver a ejecutar el aprovisionamiento, al ya habre creado la máquina virtual tendremos que, o si esta encendida hacer vagrant provision, o si esta apagada vagrant up --provision, ya que una vez que se ejecuta vagrant up, el aprovisionamiento pasa a ser ignorado en los siguientes vagrant up.  
 
 Comprobación de que sigue funcionando el servicio de apache despues de hacer el aprovisionamiento, esta vez poniendo el host en la página con la variable del sistema $(hostname)  
-![Rutas de red](imagenes/Captura8.png)  
+![Cambio en la página creada para apache](imagenes/Captura8.png)  
+
+
+## Incidencias  
+Por raro que parezca, en esta práctica no a habido ningún error, ni yo me lo creo.  
