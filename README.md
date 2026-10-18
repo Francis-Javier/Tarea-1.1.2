@@ -107,7 +107,7 @@ Esquema de la arquitectura:
 /vagrant es una carpeta compartida que crea vagrant de manera automática, la cual contiene el mismo contenido que la carpeta donde están los archivos de vagrant y donde ejecute vagrant ssh, es decir que es prácticamente la misma carpeta que la carpeta vagrant del anfitrión.  
 
 Prácticamente apareceria esto en la carpeta /vagrant.  
-![Rutas de red](imagenes/Captura7.png)  
+![Contenido de carpeta](imagenes/Captura7.png)  
 
 ## Parte B. Mi primera máquina en Vagrant  
 Trabaja desde el directorio del `Vagrantfile`. Comprueba que el archivo es válido y arranca la máquina con el proveedor que tengas instalado: VirtualBox (Recomendada) o VMware Workstation Pro. **Entra por SSH. Comprueba el nombre de la máquina, la versión de Debian, las interfaces y las rutas de red.**  
@@ -180,3 +180,10 @@ Comprobación de que sigue funcionando el servicio de apache despues de hacer el
 
 ## Incidencias  
 Por raro que parezca, en esta práctica no a habido ningún error, ni yo me lo creo.  
+
+## Fuentes  
+[Introduction to Vagrant](https://hashicorp.com) Conceptos globales de arquitectura, Anfitrión, Proveedor y Box  
+[The Vagrantfile Syntax](https://hashicorp.com) Estructura y directivas en lenguaje Ruby  
+[Vagrant Networking & Forwarded Ports](https://hashicorp.com) Configuración y mapeo de adaptadores  
+[Vagrant Shell Provisioner](https://hashicorp.com) Automatización y reejecución de scripts  
+[VirtualBox Networking Architecture](https://virtualbox.org) Estudio de la red interna y comparación con soluciones Host-Only
