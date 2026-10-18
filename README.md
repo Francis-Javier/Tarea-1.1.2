@@ -25,6 +25,15 @@
 ## Parte B. Mi primera máquina en Vagrant  
 Trabaja desde el directorio del `Vagrantfile`. Comprueba que el archivo es válido y arranca la máquina con el proveedor que tengas instalado: VirtualBox (Recomendada) o VMware Workstation Pro. **Entra por SSH. Comprueba el nombre de la máquina, la versión de Debian, las interfaces y las rutas de red.**  
 
+En esta captura se puede ver que he usado el comando vagrant ssh para conectarme por ssh a la máquina virtual que he creado, y como se puede observar no hay ningun fallo y aparte cambia la ruta en terminal de la ruta de la carpeta de vagrant, a vagrant@javiervagrant el cual es el hostname que le puse a la máquina, por lo que funciona sin problemas, y tambien en la captura se puede observar que indica que versión de Debian esta instalada en este caso Debian 12 6.1.0-25-amd64.  
+![Acceso con SSH a la máquina virtual](imagenes/Captura1)  
+
+En esta captura se puede ver las interfaces de red con el comando ip a que tiene la máquina de vagrant que he creado, que como se puede ver hay tres, lo la cual es la interfaz local de la propia máquina, eth0 la cual es la interfaz de la red NAT, por eso su IP es la 10.0.2.15/24 ya que es una IP pública y la que va a necesitar Debian para poder comunicarse con internet, y la eth1 la cual es la red privada que se creo con la Ip 192.168.56.10/24.  
+![Interfaces de red](imagenes/Captura2)  
+
+En esta captura se puede ver que uso el comando ip route para ver las rutas de red que tiene la máquina de vagrant, como se puede ver en la linea default via 10.0.2.2 dev eth0 se define la puerta de enlace por defecto de la máquina la cual va a ser la interfaz NAT, por lo que todo el tráfico hacia el exterior pasara por ella, y en la linea 192.168.56.0/24 dev eth1, que todo el trafico de la red de laboratorio pase3 por la segunda interfaz que se añadió.(todas estas capturas se tomarón cuando ya se modifico el archivo de vagrant, por así decirlo sería el apartado B y C juntos).  
+![Rutas de red](imagenes/Captura3)  
+
 ## Parte C. Completa el Vagrantfile  
 Modifica el archivo inicial para crear **una máquina Debian 12 con dos interfaces o adaptadores de red**:  
 
