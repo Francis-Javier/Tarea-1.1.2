@@ -34,6 +34,10 @@ En esta captura se puede ver las interfaces de red con el comando ip a que tiene
 En esta captura se puede ver que uso el comando ip route para ver las rutas de red que tiene la máquina de vagrant, como se puede ver en la linea default via 10.0.2.2 dev eth0 se define la puerta de enlace por defecto de la máquina la cual va a ser la interfaz NAT, por lo que todo el tráfico hacia el exterior pasara por ella, y en la linea 192.168.56.0/24 dev eth1, que todo el trafico de la red de laboratorio pase3 por la segunda interfaz que se añadió.(todas estas capturas se tomarón cuando ya se modifico el archivo de vagrant, por así decirlo sería el apartado B y C juntos).  
 ![Rutas de red](imagenes/Captura3)  
 
+
+En esta captura se puede ver la máquina virtual en virtualbox cuando ya he acabado la práctica y esta apagada, la última la del nombre Máquina-vagrant-Javier.  
+![Nombre de la máquina](imagenes/Captura6)  
+
 ## Parte C. Completa el Vagrantfile  
 Modifica el archivo inicial para crear **una máquina Debian 12 con dos interfaces o adaptadores de red**:  
 
