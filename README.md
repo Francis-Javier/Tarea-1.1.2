@@ -12,15 +12,17 @@
 
 ### 4. Órdenes y carpeta compartida. En una tabla breve, indica cuándo usarías `up`, `status`, `ssh`, `reload`, `provision`, `halt` y `destroy`; marca cuáles llegaste a ejecutar. Averigua qué es `/vagrant` y comprueba qué archivos aparecen allí.  
 
-| Comando | Cuándo usarlo | ¿Ejecutado en la práctica? |
+| Comando | Cuándo usarlo | Lo he usado en la práctica |
 | :--- | :--- | :---: |
 | **up** | Para crear y también encender la máquina virtual cuando este apagada | **Sí** |
 | **status** | Para saber el estado actual de la máquina virtual, si esta encendida, apagada, funcionando, con un error, etc .. | **Sí** |
 | **ssh** | Para conectarse desde el anfitrión (en la terminal) a la máquina virtual de forma segura | **Sí** |
-| **reload** | Para reiniciar la máquina virtual, es necesario usarlo si se hacen cambios en los archivos de vagrant de la máquina | **Sí** |
+| **reload** | Para reiniciar la máquina virtual, es necesario usarlo si se hacen cambios en los archivos de vagrant de la máquina | **No** |
 | **provision** | Para forzar a que se ejecute el script de aprovisionamiento, el que instala apache | **Sí** |
 | **halt** | Para apagar la máquina virtual de manera segura, deteniendo todos los procesos del sistema operativo | **Sí** |
-| **destroy** | Para borrar por completo la máquina virtual así como sus archivos y sus discos duros | **Sí** |
+| **destroy** | Para borrar por completo la máquina virtual así como sus archivos y sus discos duros | **No** |  
+
+/vagrant es una carpeta compartida que crea vagrant de manera automática, la cual contiene el mismo contenido que la carpeta donde están los archivos de vagrant y donde ejecute vagrant ssh, es decir que es prácticamente la misma carpeta que la carpeta vagrant del anfitrión.  
 
 ## Parte B. Mi primera máquina en Vagrant  
 Trabaja desde el directorio del `Vagrantfile`. Comprueba que el archivo es válido y arranca la máquina con el proveedor que tengas instalado: VirtualBox (Recomendada) o VMware Workstation Pro. **Entra por SSH. Comprueba el nombre de la máquina, la versión de Debian, las interfaces y las rutas de red.**  
